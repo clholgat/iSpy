@@ -1,0 +1,30 @@
+!SESSION 2012-06-30 12:31:22.717 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.7.0_02
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en
+Command-line arguments:  -data C:\Users\Pooja\iSpy\iSpy -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.ui 4 4 2012-06-30 12:31:25.162
+!MESSAGE Unable to create menu item "org.eclipse.sequoyah.android.cdt.internal.build.ui.addNativeSupport", command "org.eclipse.sequoyah.android.cdt.internal.build.ui.addNativeSupport" not defined
+
+!ENTRY org.eclipse.update.configurator 4 0 2012-06-30 12:31:26.639
+!MESSAGE Can't find bundle for base name feature, locale en
+
+!ENTRY org.eclipse.update.configurator 4 0 2012-06-30 12:31:26.645
+!MESSAGE Can't find bundle for base name feature, locale en
+
+!ENTRY org.eclipse.update.configurator 4 0 2012-06-30 12:31:26.707
+!MESSAGE Can't find bundle for base name feature, locale en
+
+!ENTRY org.eclipse.update.configurator 4 0 2012-06-30 12:31:26.884
+!MESSAGE Can't find bundle for base name feature, locale en
+
+!ENTRY com.android.ide.eclipse.ddms 4 0 2012-06-30 12:31:29.599
+!MESSAGE DDMS files not found: C:\Users\Pooja\Motorola Mobility\MOTODEV Studio for Android\platform-tools\adb.exe C:\Users\Pooja\Motorola Mobility\MOTODEV Studio for Android\tools\hprof-conv.exe C:\Users\Pooja\Motorola Mobility\MOTODEV Studio for Android\tools\traceview.bat 
+
+!ENTRY com.android.ide.eclipse.adt 2 0 2012-06-30 12:31:30.061
+!MESSAGE An Android SDK is already being loaded. Please try again later.
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-06-30 12:32:10.663
+!MESSAGE Failed to load properties file for project 'iSpy_AndroidApp'

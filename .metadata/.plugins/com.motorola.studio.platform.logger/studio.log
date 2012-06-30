@@ -1,0 +1,29 @@
+2012-06-30 12:31:27,027 [Instance Event Manager] INFO  Studio for Android - The android device instance status was updated: HelloAndroid Status: OFF
+2012-06-30 12:31:27,027 [main] INFO  Studio for Android - Setting focus to Android Emulator View
+2012-06-30 12:31:27,028 [main] DEBUG class java.lang.Class - Read initial page property:studio.android.initial.page = null
+2012-06-30 12:31:27,028 [main] DEBUG class java.lang.Class - Use the default URL to be opened in the Web Browser Editor.
+2012-06-30 12:31:27,029 [Instance Event Manager] INFO  Studio for Android - The android device instance status was updated: HelloAndroid Status: com.motorola.studio.android.emulator.status.notavailable
+2012-06-30 12:31:27,035 [main] DEBUG class java.lang.Class - Open new Web Browser Editor for: file:/C:/Users/Pooja/Motorola Mobility/MOTODEV Studio for Android/MOTODEV/index.html
+2012-06-30 12:31:29,547 [Worker-4] INFO  Studio for Android - Updating Android Emulator viewers
+2012-06-30 12:31:29,753 [main] DEBUG Studio for Android - No active instance being shown at emulator view
+2012-06-30 12:31:29,902 [Worker-0] INFO  class com.motorola.studio.android.installer.startup.InstallationChecker - Is there any SDK set? true
+2012-06-30 12:31:29,965 [Worker-2] DEBUG class com.motorola.studio.android.AndroidPlugin - Notify SDK loader listeners
+2012-06-30 12:31:29,967 [Worker-0] DEBUG class com.motorola.studio.android.ophone.OPhonePlugin - Added SDK listener to perform configurations when an OPhone SDK is loaded.
+2012-06-30 12:31:29,968 [Worker-3] DEBUG class com.motorola.studio.android.AndroidPlugin - Notify SDK loader listeners
+2012-06-30 12:31:29,968 [Worker-3] DEBUG class com.motorola.studio.android.ophone.OPhonePlugin$1 - An SDK was just loaded. Check if it is an OPhone SDK
+2012-06-30 12:31:29,972 [Instance Event Manager] INFO  Studio for Android - The android device instance status was updated: HelloAndroid Status: com.motorola.studio.android.emulator.status.offline
+2012-06-30 12:31:29,973 [Worker-2] DEBUG Studio for Android - Device connected: 04037F780200600C
+2012-06-30 12:31:29,973 [Worker-3] DEBUG Studio for Android - Device connected: 04037F780200600C
+2012-06-30 12:31:29,993 [Worker-0] INFO  Studio for Android - [Status: id=IDLE;name=IDLE]
+2012-06-30 12:31:29,993 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.emulator.status.offlineNoData;name=Offline (no user data)]
+2012-06-30 12:31:29,993 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.handset.status.handsetonline;name=Online]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.emulator.status.online;name=Online]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.remote.status.connected;name=Connected]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.emulator.status.notavailable;name=Not available]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=OFF;name=OFF]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=INACTIVE;name=INACTIVE]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.remote.status.disconnected;name=Disconnected]
+2012-06-30 12:31:29,994 [Worker-0] INFO  Studio for Android - [Status: id=com.motorola.studio.android.emulator.status.offline;name=Offline]
+2012-06-30 12:31:30,638 [Worker-4] INFO  Studio for Android - Updating Android Emulator viewers
+2012-06-30 12:31:30,677 [main] DEBUG Studio for Android - No active instance being shown at emulator view
+2012-06-30 12:37:36,894 [Thread-90] DEBUG Studio for Android - Completely Up Device: 04037F780200600C
