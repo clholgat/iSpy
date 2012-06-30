@@ -15,7 +15,7 @@ class User(db.Model):
     account = db.UserProperty()
     activeGame = db.ReferenceProperty()
     location = db.GeoPtProperty()
-    # C2DM needed here
+    deviceId = db.StringProperty()
 
 class Message(db.Model):
     time = db.TimeProperty()
