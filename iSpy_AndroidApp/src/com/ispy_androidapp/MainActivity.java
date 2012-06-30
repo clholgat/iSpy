@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,9 +35,14 @@ public class MainActivity extends ListActivity {
         
         
         this.setListAdapter(arrayAdapter);
+        
+        
     }
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
+    	
+    	 Intent myIntent = new Intent(v.getContext(),CreateViewGame.class);
+         startActivityForResult(myIntent, 0);
     }
     
 }

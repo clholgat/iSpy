@@ -4,4 +4,6 @@
     <string name="app_name">User Application</string>
     <string name="iSpy">iSpy </string>
     <string name="just_stuff">Just Stuff</string>
+    <string name="create_game"> Create Game ! </string>
+    <string name="view_game"> View Games in the area </string>
 </resources>
