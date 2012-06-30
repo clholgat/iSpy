@@ -1,15 +1,36 @@
 import webapp2
 import json
+import datetime
+import urllib
+import logging
 
 from google.appengine.ext import users
 
 class Register(webapp2.RequestHandler):
     def post(self):
-        # Do something
+        user = users.get_current_user()
+
+        if user:
+            player = User()
+            player.account = user
+            player.deviceId = int(self.request.get("deviceId"))
+            player.put()
+        else:
+            self.repsonse.out.write(json.dumps({'error': 'No authenticated user'}))
+
+        self.response.out.write(json.dumps({'success': 'user registered'}))
 
 class StartGame(webapp2.RequestHandler):
     def post(self):
-        # Start game
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
+
+        game = Game.gql("WHERE creator = :1", user)
+        # handle notifications here
+
 
 class Message(webapp2.RequestHandler):
     def post(self, messageid):
@@ -42,47 +63,25 @@ def auth():
     user = users.get_current_user()
 
     if user:
-        # we'll get back to this
+        player = Users.gql("WHERE player = :1", user)
+        return player.fetch(1)[0]
 
 def sendMessage(player, message):
-    logging.debug(message.text)
-    url = "https://android.clients.google.com/c2dm/send"
-    payload = {}
-    fields = {
+    # logging.debug(message.text)
+    url = "https://android.googleapis.com/gcm/send"
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'key=AIzaSyAyHVqjOn9VZOFqFDYRxO9y168gSTpVmfc'
+    }
+    data = {
         'registration_id': player.registrationId,
-        'collapse_key': player.player.nickname(),
-        'data.payload': message.text,
-        'Authorization': 'GoogleLogin auth=%s'%getAuthKey()
+        'data': message.txt
     }
 
-    form_data = urllib.urlencode(fields)
-    logging.debug(form_data)
-    result = urlfetch.fetch(url=url, payload=form_data, method=urlfetch.POST, headers={'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'GoogleLogin auth=%s'%getAuthKey()})
-    logging.debug(result.content)
-
-token = None
-def getAuthKey():
-    global token
-    if token != None:
-        return token
-    config = ConfigParser.ConfigParser()
-    config.read('login.config')
-    mk = __name__+".authkey"
-    form_fields = {
-        "accountType": config.get('login', 'accountType'),
-        "Email": config.get('login', 'Email'),
-        "Passwd": config.get('login', 'Passwd'),
-        "service": config.get('login', 'service'), ## ( c2dm_service = "ac2dm" )
-        "source": config.get('login', 'source'),
-    }
-    form_data = urllib.urlencode(form_fields)
-    result = urlfetch.fetch(url='https://www.google.com/accounts/ClientLogin',
-                            payload=form_data,
-                            method=urlfetch.POST,
-                            headers={'Content-Type': 'application/x-www-form-urlencoded'})
-    fields=result.content.split("\n")
-    token = fields[2].split('=')[1]
-    return token
+    data_encode = urllib.urlencode(data)
+    request = urllib.Request(url, data_encode, headers)
+    response = urllib.urlopen(request)
+    logging.debug(response.read())
 
 app = webapp2.WSGIApplication([
     ('/register', Register),
