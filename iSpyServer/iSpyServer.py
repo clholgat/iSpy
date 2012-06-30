@@ -34,29 +34,59 @@ class StartGame(webapp2.RequestHandler):
 
 class Message(webapp2.RequestHandler):
     def post(self, messageid):
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
         confirm = self.request.get("confirm");
         # confirm/deny guess
 
 class Messages(webapp2.RequestHanlder):
     def post(self, gameid):
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
         gameid = int(gameid)
         message = json.loads(self.request.get("message"))
         # Handle message
 
     def get(self, gameid):
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
         since = int(self.request.get("since"))
         # return messages
 
 class Join(webapp2.RequestHandler):
     def post(self, gameid):
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
         # add user to game
 
 class Location(webapp2.RequestHandler):
     def post(self):
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
         # Store user location
 
 class Register(webapp2.RequestHandler):
     def post(self):
+        user = auth()
+
+        if user == None:
+            self.response.out.write(json.dumps({'error': 'No autheticated user'}))
+            return
         # set up user object
 
 def auth():
@@ -65,6 +95,8 @@ def auth():
     if user:
         player = Users.gql("WHERE player = :1", user)
         return player.fetch(1)[0]
+    else:
+        return None
 
 def sendMessage(player, message):
     # logging.debug(message.text)
