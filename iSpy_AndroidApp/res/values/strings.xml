@@ -6,4 +6,7 @@
     <string name="just_stuff">Just Stuff</string>
     <string name="create_game"> Create Game ! </string>
     <string name="view_game"> View Games in the area </string>
+    <string name="game_name_label"> Enter Name of the Game: </string>
+    <string name="range_label"> Enter Range:</string>
+    <string name="clue_label"> Enter Clue: </string>
 </resources>
