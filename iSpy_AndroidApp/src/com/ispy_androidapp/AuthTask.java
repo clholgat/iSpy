@@ -1,10 +1,14 @@
 package com.ispy_androidapp;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
+import org.apache.http.message.BasicNameValuePair;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -19,7 +23,8 @@ public class AuthTask extends AsyncTask<String, Void, Boolean> {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("https://ispy-server.appspot.com/_ah/login?continue=http://localhost/&auth="+authToken);
-			HttpResponse response = client.execute(get);
+			get.addHeader("Cookie", Constant.authCookie);
+			HttpResponse response = client.execute(get);		
 			
 			if (response.getStatusLine().getStatusCode() != 302) {
 				Log.e(TAG, "could not authenticate");

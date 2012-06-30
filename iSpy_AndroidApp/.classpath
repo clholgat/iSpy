@@ -9,5 +9,6 @@
 			<attribute name="javadoc_location" value="jar:file:/home/carson/hack-thing/iSpy/iSpy_AndroidApp/libs/gson-2.2.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/gcm.jar" sourcepath="libs/gcm-src.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

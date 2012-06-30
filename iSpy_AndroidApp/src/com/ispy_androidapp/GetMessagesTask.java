@@ -21,6 +21,7 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(Constant.server+"/messages/"+params[0]
 					+"?since="+Constant.lastUpdate);
+			get.addHeader("Cookie", Constant.authCookie);
 			HttpResponse response = client.execute(get);
 			
 			InputStream in = response.getEntity().getContent();
