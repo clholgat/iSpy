@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+C:\Users\Pooja\iSpy\iSpy\.metadata\.plugins\org.eclipse.jdt.core
+3201398653.index
+3352491446.index
+429816833.index
