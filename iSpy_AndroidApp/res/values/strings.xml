@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World</string>
     <string name="app_name">User Application</string>
+    <string name="iSpy">iSpy </string>
+    <string name="just_stuff">Just Stuff</string>
 </resources>
