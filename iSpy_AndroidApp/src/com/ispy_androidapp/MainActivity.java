@@ -3,6 +3,7 @@ package com.ispy_androidapp;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,9 +47,13 @@ public class MainActivity extends ListActivity {
         } else {
           Log.v(TAG, "Already registered");
         }
+        
     }
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
+    	
+    	 Intent myIntent = new Intent(v.getContext(),CreateViewGame.class);
+         startActivityForResult(myIntent, 0);
     }
     
 }

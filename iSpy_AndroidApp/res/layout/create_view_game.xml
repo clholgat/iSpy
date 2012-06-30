@@ -14,5 +14,19 @@
 		
 	/>
 
+<Button
+     android:id = "@+id/creategame"
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:text="@string/create_game"
+     android:layout_gravity="center"
+/>
 
+<Button
+     android:id = "@+id/viewgame"	
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:text="@string/view_game"
+     android:layout_gravity="center"
+/>
 </LinearLayout>
