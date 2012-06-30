@@ -33,13 +33,10 @@ public class MainActivity extends ListActivity {
       		  R.layout.account_text, listAccounts);
         
         
-        
-        //Set the elements using List Adapter
-
         this.setListAdapter(arrayAdapter);
     }
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
     }
-    }
+    
 }
