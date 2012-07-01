@@ -38,7 +38,7 @@ public class SendMessageTask extends AsyncTask<Void, Void, String> {
 	protected String doInBackground(Void... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(Constant.server+"messages/"+Constant.gameId);
+			HttpPost post = new HttpPost(Constant.server+"messages/"+Constant.gameId+"/");
 			post.setHeader("Cookie", Constant.authCookie);
 			
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
