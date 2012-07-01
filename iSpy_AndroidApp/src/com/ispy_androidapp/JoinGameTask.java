@@ -1,5 +1,4 @@
 package com.ispy_androidapp;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,58 +8,56 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.google.gson.Gson;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class CreateGameTask extends AsyncTask<Game, Void, String> {
-	private String TAG = "CreateGameTask";
+import com.google.gson.Gson;
+
+
+public class JoinGameTask extends AsyncTask<Long, Void, String> {
+
+	private String TAG = "JoinGameTask";
+	
+	private Gson gson = new Gson();
+	
 	@Override
-	protected String doInBackground(Game... params) {
+	protected String doInBackground(Long... params) {
 		try {
+			
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(Constant.server+"/creategame");
-			post.setHeader("Cookie", Constant.authCookie);
-			
-			List<NameValuePair> list = new ArrayList<NameValuePair>();
-			list.add(new BasicNameValuePair("name",params[0].name ));
-			list.add(new BasicNameValuePair("range", params[0].range));
-			list.add(new BasicNameValuePair("clue", params[0].clue));
-			
-			post.setEntity(new UrlEncodedFormEntity(list));
-			
-			HttpResponse response = client.execute(post);
+			HttpGet get = new HttpGet(Constant.server+"/join/"+params[0]);
+			get.addHeader("Cookie", Constant.authCookie);
+			HttpResponse response = client.execute(get);
 			
 			InputStream in = response.getEntity().getContent();
 			String json = new Scanner(in).useDelimiter("\\A").next();
 			return json;
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			Log.e(TAG, e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
 	@Override
 	protected void onPostExecute(String json) {
-		Gson gson = new Gson();
 		Response response = gson.fromJson(json, Response.class);
 		if (response.error != null) {
 			Log.e(TAG, response.error);
-			return;
 		} else {
-			Constant.gameId = response.gameId;
+			Log.d(TAG, response.success);
 		}
 	}
 	
 	private class Response {
+		public String success;
 		public String error;
-		public long gameId;
 	}
-
+	
 }
