@@ -217,9 +217,11 @@ def auth():
     user = users.get_current_user()
 
     if user:
+        logging.debug("User logged in")
         player = User.gql("WHERE player = :1", user)
         return player.fetch(1)[0]
     else:
+        logging.debug("Cannot find a logged in user")
         return None
 
 '''
