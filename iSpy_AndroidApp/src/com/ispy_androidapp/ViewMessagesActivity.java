@@ -13,12 +13,14 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class ViewMessagesActivity extends Activity {
 	
 	private Bitmap bitmap = null;
 	private EditText text = null;
+	private ImageButton attach = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,15 +28,15 @@ public class ViewMessagesActivity extends Activity {
 		setContentView(R.layout.messages);
 		
 		ListView listView = (ListView) findViewById(R.id.message_list);
-		List<Message> messages = new ArrayList<Message>();
+		final List<Message> messages = new ArrayList<Message>();
 		
-		MessageAdapter adapter = new MessageAdapter(this, R.layout.message, messages);
+		final MessageAdapter adapter = new MessageAdapter(this, R.layout.message, messages);
 		
 		listView.setAdapter(adapter);
 		
-		// new GetMessagesTask(messages, adapter).execute(Constant.gameId);
+		new GetMessagesTask(messages, adapter).execute(Constant.gameId);
 		
-		Button attach = (Button) findViewById(R.id.attach_button);
+		attach = (ImageButton) findViewById(R.id.attach_button);
 		attach.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -45,9 +47,12 @@ public class ViewMessagesActivity extends Activity {
 		Button send = (Button) findViewById(R.id.send);
 		send.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
+				new SendMessageTask(text.getText().toString(), bitmap).execute();
+				new GetMessagesTask(messages, adapter).execute(Constant.gameId);
 			}
 		});
+		
+		text = (EditText) findViewById(R.id.input_text);
 	}
 	
 	@Override
@@ -55,5 +60,12 @@ public class ViewMessagesActivity extends Activity {
 		bitmap = (Bitmap) data.getExtras().get("data");
 		Drawable drawable = new BitmapDrawable(getResources(), bitmap);
 		text.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+		attach.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				// do nothing				
+			}
+		});
 	}
+	
+
 }
