@@ -92,6 +92,8 @@ class CreateGame(webapp2.RequestHandler):
         clue.gameid = game.key().id()
         clue.user = user
         clue.put()
+        user.activeGame = game
+        user.put()
         #Notify users in the location
         #Return Game ID to UI
         logging.debug(game.key().id())
@@ -221,8 +223,7 @@ class Join(webapp2.RequestHandler):
             game.players.append(user)
             game.put()
             user.activeGame = game
-        
-        # add user to game
+            user.put()
 
 '''
 Periodically update the users' Current location
