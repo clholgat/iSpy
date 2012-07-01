@@ -69,7 +69,7 @@ class CreateGame(webapp2.RequestHandler):
         #Notify users in the location
         
         #Return Game ID to UI
-        return game.key().id
+        return json.dumps({'gameid': game.key().id})
 
 '''
 Fetch Games in nearby area
