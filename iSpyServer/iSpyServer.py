@@ -43,7 +43,7 @@ class Register(webapp2.RequestHandler):
             player.put()
         else:
             logging.debug("Register: User Not Registered")
-            self.repsonse.out.write(json.dumps({'error': 'No authenticated user'}))
+            self.response.out.write(json.dumps({'error': 'No authenticated user'}))
         self.response.out.write(json.dumps({'success': 'user registered'}))
 '''
 User creates a game - name (str), range (float), clue (string)
@@ -219,7 +219,6 @@ def sendMessage(player, message):
         'registration_id': player.registrationId,
         'data': message.txt
     }
-
     data_encode = urllib.urlencode(data)
     
     #request = urllib.Request(url, data_encode, headers)
