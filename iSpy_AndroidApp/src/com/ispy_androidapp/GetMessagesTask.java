@@ -32,7 +32,7 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(Constant.server+"/messages/"+Constant.gameId
-					+"?since="+Constant.lastUpdate);
+					+"/?since="+Constant.lastUpdate);
 			get.addHeader("Cookie", Constant.authCookie);
 			HttpResponse response = client.execute(get);
 			

@@ -142,7 +142,7 @@ class Message(webapp2.RequestHandler):
 '''
 Retrieves the list of messages
 '''
-class Messages(webapp2.RequestHandler):
+class PostMessage(webapp2.RequestHandler):
     '''
     Message is posted to a game by a user
     '''
@@ -163,16 +163,18 @@ class Messages(webapp2.RequestHandler):
         message.confirmed = False
         self.response.out.write(json.dumps({'success': 'sent message'}))
         # Handle message
+
+class GetMessages(webapp2.RequestHandler):
     '''
     Messages are fetched by user using game id
     '''
-    def get(self, gameid):
+    def get(self, gameid, since):
         user = auth()
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         
-        since = int(self.request.get("since"))
+        since = int(since)
         q = db.GQLQuery("SELECT * FROM Message WHERE gameid= :1 AND time > :2", gameid, since)
         
         results = q.fetch()
@@ -245,7 +247,8 @@ app = webapp2.WSGIApplication([
     ('/startgame', StartGame),
     ('/fetchgames', FetchGames),
     webapp2.Route('/confirm/<messageid:[0-9]*>', handler=Message),
-    webapp2.Route('/messages/<gameid: [0-9]*>*', handler=Messages),
-    webapp2.Route('/join/<gameid: [0-9]*>', handler=Join),
+    webapp2.Route('/messages/<gameid:[0-9]*>/<since: [0-9]*>', handler=GetMessages),
+    webapp2.Route('/messages/<gameid:[0-9]*>', handler=PostMessage),
+    webapp2.Route('/join/<gameid:[0-9]*>', handler=Join),
     ('/location', Location),
     ], debug=True)
