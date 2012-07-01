@@ -173,6 +173,7 @@ class Messages(webapp2.RequestHandler):
 
 '''
 When someone joins an ongoing game
+Input: game id
 '''
 class Join(webapp2.RequestHandler):
     def post(self, gameid):
@@ -181,6 +182,10 @@ class Join(webapp2.RequestHandler):
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
+        
+        # Check to see if the game is still active
+        
+
         # add user to game
 
 '''
