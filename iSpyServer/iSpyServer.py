@@ -103,7 +103,7 @@ class FetchGames(webapp2.RequestHandler):
         
         point_of_origin = user.location
         game_keys = Game.gql('WHERE active =  :1',True)
-        active_games = game_keys.fetch()
+        active_games = game_keys.fetch(game_keys.count())
         
         result = {}
         
