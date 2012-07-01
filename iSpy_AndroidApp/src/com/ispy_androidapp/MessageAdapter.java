@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,27 +33,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 	private Context context;
 	private int resId;
 	
-	private LruCache<String, Bitmap> bitmapCache;
-	private List<String> requestQueue;
-	
 	public MessageAdapter(Context ctx,
 			int textViewResourceId, List<Message> objects) {
 		super(ctx, textViewResourceId, objects);
 		messages = objects;
 		context = ctx;
 		resId = textViewResourceId;
-		
-		MemoryInfo memInfo = new MemoryInfo();
-		ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
-		manager.getMemoryInfo(memInfo);
-		int cacheSize = (int) (memInfo.availMem/4);
-		bitmapCache = new LruCache<String, Bitmap>(cacheSize) {
-			protected int sizeOf(String key, Bitmap value) {
-				return value.getWidth()*value.getHeight();
-			}
-		};
-		
-		requestQueue = new ArrayList<String>();
 		
 	}
 	
@@ -78,7 +64,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		final Message message = messages.get(position);
 		holder.userName.setText(message.username);
 		holder.messageImage.setTag(message.img);
-		holder.messageImage.setImageBitmap(requestBitmap(message.img, holder.messageImage));
+		
+		byte[] bytes = Base64.decode(message.img, Base64.DEFAULT);
+		Bitmap b = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+		holder.messageImage.setImageBitmap(b);
 		holder.messageText.setText(message.text);
 		holder.right.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -99,13 +88,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		return row;
 	}
 	
-	private Bitmap requestBitmap(String url, ImageView img) {
-		Bitmap b = bitmapCache.get(url);
-		if (b == null) {
-			new GetImageTask(img).execute(url);
-		}
-		return b;
-	}
 	
 	private class MessageHolder {
 		TextView userName;
@@ -115,41 +97,5 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		Button wrong;
 	}
 	
-	private class GetImageTask extends AsyncTask<String, Void, Boolean> {
-		ImageView img;
-		
-		public GetImageTask(ImageView img) {
-			this.img = img;
-		}
 
-		@Override
-		protected Boolean doInBackground(String... params) {
-			Bitmap b = null;
-			try {
-				HttpClient client = new DefaultHttpClient();
-				HttpGet get = new HttpGet(params[0]);
-				
-				HttpResponse response = client.execute(get);
-				InputStream in = response.getEntity().getContent();
-				
-				b = BitmapFactory.decodeStream(in);
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-			
-			if (b != null) {
-				synchronized (bitmapCache) {
-					bitmapCache.put(params[0], b);
-				}
-				requestQueue.remove(params[0]);
-				if (img.getTag().equals(params[0])) {
-					img.setImageBitmap(b);
-				}
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-	}
 }

@@ -38,16 +38,21 @@ class Register(webapp2.RequestHandler):
     def post(self):
         logging.debug("Register:")
         user = users.get_current_user()
+
         if user:
-            logging.debug("Register: User Registered")
-            player = MyUser.gql("WHERE account = :1", user)
+            player = MyUser.gql("WHERE account = :1", user).fetch(1)
+            if len(player) == 0:
+                player = MyUser()
+                player.account = user
+                player.deviceId = self.request.get("deviceId")
+                player.put()
+                logging.debug("Created new user")
+            else:
+                logging.debug("Existing user")
+            self.response.out.write(json.dumps({'success': 'user registered'}))
         else:
-            logging.debug("Register: User Not Registered")
-            player = MyUser()
-            player.account = user
-            player.deviceId = self.request.get("deviceId")
-            player.put()
-        self.response.out.write(json.dumps({'success': 'user registered'}))
+            self.response.out.write(json.dumps({'error': 'No authenticated user'}))
+
 '''
 User creates a game - name (str), range (float), clue (string)
 '''
@@ -172,7 +177,7 @@ class Messages(webapp2.RequestHandler):
         message.user = user
         message.gameid = gameid
         message.img = bitmap
-        message.confirmed = false
+        message.confirmed = False
         self.response.out.write(json.dumps({'success': 'sent message'}))
         # Handle message
     '''
