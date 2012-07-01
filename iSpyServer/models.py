@@ -12,10 +12,10 @@ class Game(db.Model):
     creator = db.IntegerProperty()
     location = db.GeoPtProperty()           #Location around which the game is centered
     range = db.FloatProperty()              #Area around the center of the game where players can join
-    clue = db.Key()                         ## The initial clue that starts a game
+    clue = db.IntegerProperty()                         ## The initial clue that starts a game
     active = db.BooleanProperty()
 
-class User(db.Model):
+class MyUser(db.Model):
     account = db.UserProperty()
     activeGame = db.ReferenceProperty(Game)
     location = db.GeoPtProperty()           # Users most recent location
@@ -23,8 +23,8 @@ class User(db.Model):
 
 class Message(db.Model):
     time = db.TimeProperty()
-    user = db.ReferenceProperty(User)
-    gameid = db.ReferenceProperty(Game)
+    user = db.ReferenceProperty(MyUser)
+    gameid = db.IntegerProperty()
     img = db.LinkProperty()
     text = db.StringProperty()
     confirmed = db.BooleanProperty()

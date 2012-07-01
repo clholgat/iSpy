@@ -11,8 +11,9 @@ import geo.geomodel
 import geo.geotypes
 import geo.geomath
 
-from models import User
+from models import MyUser
 from models import Game
+from models import Message
 
 
 '''
@@ -21,9 +22,11 @@ Authenticates a user
 def auth():
     logging.debug("auth: ")    
     user = users.get_current_user()
+    logging.debug(user)
     if user:
-        logging.debug("auth: User logged in")
-        player = User.gql("WHERE player = :1", user)
+        logging.debug("auth: User logged in - ")
+        #return user
+        player = MyUser.gql("WHERE account = :1", user)
         return player.fetch(1)[0]
     else:
         logging.debug("auth: Cannot find a logged in user")
@@ -37,7 +40,7 @@ class Register(webapp2.RequestHandler):
         user = users.get_current_user()
         if user:
             logging.debug("Register: User Registered")
-            player = User()
+            player = MyUser()
             player.account = user
             player.deviceId = int(self.request.get("deviceId"))
             player.put()
@@ -56,13 +59,13 @@ class CreateGame(webapp2.RequestHandler):
             logging.debug("CreateGame: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
             return
-        logging.debug("CreateGame: Before creating Game Object")
+        logging.debug("CreateGame: Before creating Game Object - User id is " + user.key().id())
         #Create Game
         game = Game()
         game.name = self.request.get("name")
         game.players = []
         game.messages = []
-        game.creator = user.key().id
+        game.creator = user.key().id()
         game.location = db.GeoPt(self.request.get('lat'), self.request.get('lon'))  ## Do we get current location? or is it sent by post?
         game.range = self.request.get('range')
         game.startTime = datetime.datetime.now()
@@ -70,21 +73,24 @@ class CreateGame(webapp2.RequestHandler):
         
         clue = Message()
         clue.text = self.request.get('clue')
-        clue.user = user
+        clue.user = user.key().id()
         clue.time = datetime.time(datetime.datetime.now()) 
         clue.put()
         logging.debug("CreateGame: Clue Object Created")
         
-        game.clue = clue.key()
+        game.clue = clue.key().id()
         game.active = True
         game.put()
         
-        logging.debug("Game object created")
-        #Notify users in the location
         
+        logging.debug("Game object created")
+        clue.gameid = game.key().id()
+        
+        logging.debug("CreateGame: Clue Object Updated" + clue.gameid)
+        #Notify users in the location
         #Return Game ID to UI
-        logging.debug(game.key().id)
-        self.response.out.write(json.dumps({'gameid': game.key().id}))
+        logging.debug(game.key().id())
+        self.response.out.write(json.dumps({'gameid': game.key().id()}))
 
 '''
 Fetch Games in nearby area
