@@ -36,7 +36,7 @@ public class UpdateLocationTask extends AsyncTask<Double, Void, String> {
 			String json = new Scanner(in).useDelimiter("\\A").next();
 			return json;
 		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage()+"");
 			e.printStackTrace();
 		}
 		return null;

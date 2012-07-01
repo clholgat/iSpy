@@ -1,9 +1,10 @@
 package com.ispy_androidapp;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -13,10 +14,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.google.gson.Gson;
-
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 public class CreateGameTask extends AsyncTask<Game, Void, String> {
 	private String TAG = "CreateGameTask";
@@ -38,7 +39,13 @@ public class CreateGameTask extends AsyncTask<Game, Void, String> {
 			HttpResponse response = client.execute(post);
 			
 			InputStream in = response.getEntity().getContent();
-			String json = new Scanner(in).useDelimiter("\\A").next();
+			StringBuilder builder = new StringBuilder();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String json;
+			while((json = reader.readLine()) != null) {
+				builder.append(json);
+			}
+			json = builder.toString();
 			return json;
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
