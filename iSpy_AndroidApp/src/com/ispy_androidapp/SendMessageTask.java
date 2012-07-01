@@ -1,7 +1,9 @@
 package com.ispy_androidapp;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -38,7 +40,7 @@ public class SendMessageTask extends AsyncTask<Void, Void, String> {
 	protected String doInBackground(Void... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(Constant.server+"messages/"+Constant.gameId+"/");
+			HttpPost post = new HttpPost(Constant.server+"messages/"+Constant.gameId);
 			post.setHeader("Cookie", Constant.authCookie);
 			
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -59,7 +61,13 @@ public class SendMessageTask extends AsyncTask<Void, Void, String> {
 			HttpResponse response = client.execute(post);
 			
 			InputStream in = response.getEntity().getContent();
-			String json = new Scanner(in).useDelimiter("\\A").next();
+			StringBuilder builder = new StringBuilder();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String json;
+			while((json = reader.readLine()) != null) {
+				builder.append(json);
+			}
+			json = builder.toString();
 			return json;
 		} catch (Exception e){
 			Log.e(TAG, e.getMessage());

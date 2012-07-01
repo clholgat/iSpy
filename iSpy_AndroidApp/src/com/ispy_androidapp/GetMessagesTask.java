@@ -32,7 +32,7 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(Constant.server+"/messages/"+Constant.gameId
-					+"/?since="+Constant.lastUpdate);
+					+"/"+Constant.lastUpdate);
 			get.addHeader("Cookie", Constant.authCookie);
 			HttpResponse response = client.execute(get);
 			
@@ -57,6 +57,7 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 		Message[] newMessages = gson.fromJson(json, Message[].class);
 		for (Message m : newMessages) {
 			messages.add(m);
+			Log.e(TAG, m.text+" ");
 		}
 		adapter.notifyDataSetChanged();
 	}

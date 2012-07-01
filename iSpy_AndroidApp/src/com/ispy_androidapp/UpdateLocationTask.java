@@ -32,9 +32,8 @@ public class UpdateLocationTask extends AsyncTask<Double, Void, String> {
 			
 			HttpResponse response = client.execute(post);
 			
-			InputStream in = response.getEntity().getContent();
-			String json = new Scanner(in).useDelimiter("\\A").next();
-			return json;
+			
+			return null;
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage()+"");
 			e.printStackTrace();

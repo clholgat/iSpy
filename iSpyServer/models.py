@@ -1,4 +1,5 @@
 import datetime
+import time
 import webapp2
 
 from google.appengine.ext import db
@@ -25,10 +26,10 @@ class MyMessage(db.Model):
     time = db.DateTimeProperty()
     user = db.ReferenceProperty(MyUser)
     gameid = db.IntegerProperty()
-    img = db.StringProperty()
+    img = db.TextProperty()
     text = db.StringProperty()
     confirmed = db.BooleanProperty()
 
     def toDict(self):
-        return {'messageId': this.key().id, 'time': this.time, 'user': this.user.key().id, 'username': this.user, 
-            'img': this.img, 'text': this.text, 'confirmed': this.confirmed}
+        return {'messageId': int(self.key().id()), 'time': time.mktime(self.time.timetuple()), 'user': int(self.user.key().id()), 'username': str(self.user.account), 
+            'img': self.img, 'text': self.text, 'confirmed': self.confirmed}

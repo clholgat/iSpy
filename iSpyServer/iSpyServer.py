@@ -1,8 +1,10 @@
 import webapp2
 import json
 import urllib
+import urllib2
 import logging
 import datetime
+import time
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -64,6 +66,8 @@ class CreateGame(webapp2.RequestHandler):
             logging.debug("CreateGame: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
             return
+
+        #sendMessage(user, "HELLO");
         logging.debug("CreateGame: Before creating Game Object")
         #Create Game
         game = Game()
@@ -105,12 +109,12 @@ class FetchGames(webapp2.RequestHandler):
         game_keys = Game.gql('WHERE active =  :1',True)
         active_games = game_keys.fetch(game_keys.count())
         
-        result = {}
+        result = []
         
         for g in active_games:
             distance = geo.geomath.distance(point_of_origin, g.location)
             if distance < g.range:
-                result[g.key()] = g.location
+                result.append(g.location)
         self.response.out.write(json.dumps(result))
 
 '''
@@ -136,6 +140,15 @@ class Message(webapp2.RequestHandler):
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         confirm = self.request.get("confirm");
+
+        message = MyMessage.get_by_id(int(messageid))
+        if confirm == "true":
+            message.confirmed = True
+        else:
+            message.confirmed = False
+
+        message.put()
+
         # confirm/deny guess
 
 '''
@@ -159,7 +172,9 @@ class PostMessage(webapp2.RequestHandler):
         message.user = user
         message.gameid = gameid
         message.img = bitmap
+        message.text = text
         message.confirmed = False
+        message.put()
         self.response.out.write(json.dumps({'success': 'sent message'}))
         # Handle message
 
@@ -172,15 +187,19 @@ class GetMessages(webapp2.RequestHandler):
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
-        
-        since = int(since)
-        q = db.GQLQuery("SELECT * FROM Message WHERE gameid= :1 AND time > :2", gameid, since)
-        
-        results = q.fetch()
+        logging.debug("here")
+        since = int(since)/1000
+        logging.debug(gameid)
+        q = MyMessage.gql("WHERE gameid = "+gameid)
+        logging.debug(q.count())
+        results = q.fetch(20)
         reply = []
         for result in results:
-            reply.append(result.toDict())
-        return json.dumps(reply)
+            if time.mktime(result.time.timetuple()) > since:
+                reply.append(result.toDict())
+
+        logging.debug(reply)
+        self.response.out.write(json.dumps(reply))
 
 '''
 When someone joins an ongoing game
@@ -231,14 +250,14 @@ def sendMessage(player, message):
     'Authorization': 'key=AIzaSyAyHVqjOn9VZOFqFDYRxO9y168gSTpVmfc'
     }
     data = {
-        'registration_id': player.registrationId,
-        'data': message.txt
+        'registration_id': player.deviceId,
+        'data': message
     }
     data_encode = urllib.urlencode(data)
     
-    #request = urllib.Request(url, data_encode, headers)
-  #  response = urllib.urlopen(request)
-  #  logging.debug(response.read())
+    request = urllib2.Request(url, data_encode, headers)
+    response = urllib2.urlopen(request)
+    logging.debug(response.read())
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/register', handler=Register),
@@ -246,7 +265,7 @@ app = webapp2.WSGIApplication([
     ('/startgame', StartGame),
     ('/fetchgames', FetchGames),
     webapp2.Route('/confirm/<messageid:[0-9]*>', handler=Message),
-    webapp2.Route('/messages/<gameid:[0-9]*>/<since: [0-9]*>', handler=GetMessages),
+    webapp2.Route('/messages/<gameid:[0-9]*>/<since:[0-9]*>', handler=GetMessages),
     webapp2.Route('/messages/<gameid:[0-9]*>', handler=PostMessage),
     webapp2.Route('/join/<gameid:[0-9]*>', handler=Join),
     ('/location', Location),

@@ -65,9 +65,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		holder.userName.setText(message.username);
 		holder.messageImage.setTag(message.img);
 		
-		byte[] bytes = Base64.decode(message.img, Base64.DEFAULT);
-		Bitmap b = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-		holder.messageImage.setImageBitmap(b);
+		if(message.img != null) {
+			byte[] bytes = Base64.decode(message.img, Base64.DEFAULT);
+			Bitmap b = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+			holder.messageImage.setImageBitmap(b);
+		}	
 		holder.messageText.setText(message.text);
 		holder.right.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

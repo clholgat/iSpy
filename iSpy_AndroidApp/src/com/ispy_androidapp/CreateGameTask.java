@@ -64,6 +64,7 @@ public class CreateGameTask extends AsyncTask<Game, Void, String> {
 			return;
 		} else {
 			Constant.gameId = response.gameid;
+			Constant.creator = true;
 		}
 	}
 	
