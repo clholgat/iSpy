@@ -75,7 +75,7 @@ public class AuthTask extends AsyncTask<Account, Void, Boolean> {
 			Log.e(TAG, "Could not find correct header");
 		} else {
 			Log.e(TAG, "Done");
-	    	new RegisterTask().execute();
+	    	new RegisterTask().execute(context);
 		}
 		
 	}
