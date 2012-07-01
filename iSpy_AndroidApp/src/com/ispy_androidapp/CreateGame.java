@@ -28,6 +28,7 @@ public class CreateGame extends Activity {
 			
 				 Game  newgame = new Game(name.getText().toString(),range.getText().toString(),clue.getText().toString());
 				 
+				 
 				 new CreateGameTask().execute(newgame);
 				 
 				 Intent myIntent = new Intent(view.getContext(), ViewMessagesActivity.class);

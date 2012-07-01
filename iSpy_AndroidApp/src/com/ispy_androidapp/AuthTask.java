@@ -36,7 +36,7 @@ public class AuthTask extends AsyncTask<Account, Void, Boolean> {
 			HttpClient client = new DefaultHttpClient();
 			HttpParams params = new BasicHttpParams();
 			params.setParameter("http.protocol.handle-redirects",false);
-			HttpGet get = new HttpGet("https://ispy-server.appspot.com/_ah/login?continue=www.google.com&auth="+authToken);
+			HttpGet get = new HttpGet("http://ispy-server.appspot.com/_ah/login?continue=www.google.com&auth="+authToken);
 			get.setParams(params);
 			
 			get.addHeader("Cookie", Constant.authCookie);
