@@ -2,12 +2,15 @@ package com.ispy_androidapp;
 
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 public class ViewGamesInArea extends MapActivity {
 	/**
@@ -26,13 +29,22 @@ public class ViewGamesInArea extends MapActivity {
 	     * 2. Display the games on map view
 	     * 3. On selecting a game, bring up the game view 
 	     */
-	    new FetchGamesTask().execute();
+	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
+	    
+	    //Log.e("ViewGamesInArea", mapOverlays.toString());
+	    
 	    Drawable drawable = this.getResources().getDrawable(R.drawable.ispy_overlay);
 	    
 	    iSpyOverlay itemizedoverlay = new iSpyOverlay(drawable, this);
 	    
+	    //GeoPoint point = new GeoPoint(19240000,-99120000);
+		//OverlayItem overlay = new OverlayItem(point, "iSpyGame", "Fun Stuff");
+		
+		//itemizedoverlay.addOverlay(overlay);
+		//mapOverlays.add(itemizedoverlay);
 	    
+	    new FetchGamesTask(itemizedoverlay,mapOverlays).execute();
 	    
 	}
 	

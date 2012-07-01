@@ -26,9 +26,6 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 	
 	@Override
 	protected String doInBackground(Long... params) {
-		if (Constant.gameId == 0) {
-			return null;
-		}
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(Constant.server+"/messages/"+Constant.gameId
@@ -50,9 +47,6 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 	@Override
 	protected void onPostExecute(String json) {
 		Gson gson = new Gson();
-		if (json == null) {
-			return;
-		}
 		Log.e(TAG, json);
 		Message[] newMessages = gson.fromJson(json, Message[].class);
 		for (Message m : newMessages) {
