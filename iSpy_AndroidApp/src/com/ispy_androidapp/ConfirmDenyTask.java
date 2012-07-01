@@ -24,7 +24,7 @@ public class ConfirmDenyTask extends AsyncTask<Boolean, Void, String> {
 	protected String doInBackground(Boolean... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(Constant.server+"/message/"+messageId);
+			HttpPost post = new HttpPost(Constant.server+"/confirm/"+messageId);
 			post.setHeader("Cookie", Constant.authCookie);
 			
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
