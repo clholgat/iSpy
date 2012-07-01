@@ -26,7 +26,7 @@ public class ViewGamesInArea extends MapActivity {
 	     * 2. Display the games on map view
 	     * 3. On selecting a game, bring up the game view 
 	     */
-	    
+	    new FetchGamesTask().execute();
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawable = this.getResources().getDrawable(R.drawable.ispy_overlay);
 	    
