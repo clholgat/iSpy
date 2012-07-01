@@ -33,10 +33,11 @@ public class AuthTask extends AsyncTask<Account, Void, Boolean> {
 					.getAuthToken(account, "ah", null, context, null, null);			
 			String authToken = manager.getResult().get(AccountManager.KEY_AUTHTOKEN).toString();
 			
+			
 			HttpClient client = new DefaultHttpClient();
 			HttpParams params = new BasicHttpParams();
 			params.setParameter("http.protocol.handle-redirects",false);
-			HttpGet get = new HttpGet("http://ispy-server.appspot.com/_ah/login?continue=www.google.com&auth="+authToken);
+			HttpGet get = new HttpGet(Constant.server+"/_ah/login?continue=www.google.com&auth="+authToken);
 			get.setParams(params);
 			
 			get.addHeader("Cookie", Constant.authCookie);
@@ -52,7 +53,8 @@ public class AuthTask extends AsyncTask<Account, Void, Boolean> {
 				if ("Set-Cookie".equals(header.getName())) {
 					String[] parts = header.getValue().split(";");
 					for (String part : parts) {
-						if (part.contains("ACSID")) {
+						String[] start = part.split("=");
+						if (start[0].equals("ACSID")) {
 							Log.e(TAG, part);
 							Constant.authCookie = part;
 							return true;
@@ -73,7 +75,9 @@ public class AuthTask extends AsyncTask<Account, Void, Boolean> {
 			Log.e(TAG, "Could not find correct header");
 		} else {
 			Log.e(TAG, "Done");
+	    	new RegisterTask().execute();
 		}
+		
 	}
 
 }

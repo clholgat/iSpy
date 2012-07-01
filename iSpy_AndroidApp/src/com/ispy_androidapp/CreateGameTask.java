@@ -26,6 +26,7 @@ public class CreateGameTask extends AsyncTask<Game, Void, String> {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(Constant.server+"/creategame");
 			post.setHeader("Cookie", Constant.authCookie);
+			Log.e(TAG, Constant.authCookie);
 			
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
 			list.add(new BasicNameValuePair("name",params[0].name ));
