@@ -42,7 +42,7 @@ class Register(webapp2.RequestHandler):
             logging.debug("Register: User Registered")
             player = MyUser()
             player.account = user
-            player.deviceId = int(self.request.get("deviceId"))
+            player.deviceId = self.request.get("deviceId")
             player.put()
         else:
             logging.debug("Register: User Not Registered")
@@ -59,7 +59,7 @@ class CreateGame(webapp2.RequestHandler):
             logging.debug("CreateGame: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
             return
-        logging.debug("CreateGame: Before creating Game Object - User id is " + user.key().id())
+        logging.debug("CreateGame: Before creating Game Object")
         #Create Game
         game = Game()
         game.name = self.request.get("name")
