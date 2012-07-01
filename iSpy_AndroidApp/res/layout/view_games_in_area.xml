@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.maps.MapView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#ffffff"
+    >
+   
+	<com.google.android.maps.MapView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mapview"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
     android:apiKey="0ovHphc_DdNSNMCBLIdPN-0zATYPAEZ2GmCOinA"
-/>
+	/>
+    <Button 
+        android:id="@+id/help_to_main"
+        android:textColor="@android:color/black"
+        
+        android:layout_width="80dp"
+        android:textSize="18dp"
+        android:layout_height="40dp">
+    </Button>   
+    
+   
+   <ImageView
+		android:id="@+id/cmudilbert_icon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		
+	/> 
+
+</LinearLayout>

@@ -17,13 +17,14 @@ public class iSpyOverlay extends ItemizedOverlay {
 	public iSpyOverlay(Drawable arg0, Context context) {
 		super(boundCenterBottom(arg0));
 		mContext = context;
+		
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected OverlayItem createItem(int arg0) {
+	protected OverlayItem createItem(int i) {
 		// TODO Auto-generated method stub
-		return null;
+		return mOverlays.get(i);
 	}
 
 	@Override
