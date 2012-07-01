@@ -39,12 +39,14 @@ User creates a game - name (str), range (float), clue (string)
 '''
 class CreateGame(webapp2.RequestHandler):
     def post(self):
-        user = users.get_current_user()
+        user = auth()
         
         if user == None:
+            logging.debug("Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
             return
         
+        logging.debug("Before creating Game Object")
         #Create Game
         game = Game()
         game.name = self.request.get("name")
@@ -54,6 +56,8 @@ class CreateGame(webapp2.RequestHandler):
         game.location = db.GeoPt(self.request.get('lat'), self.request.get('lon'))  ## Do we get current location? or is it sent by post?
         game.range = self.request.get('range')
         game.startTime = datetime.datetime.now()
+
+        logging.debug("Before creating Clue Object")
         
         clue = Message()
         clue.text = self.request.get('clue')
@@ -61,14 +65,18 @@ class CreateGame(webapp2.RequestHandler):
 
         clue.time = datetime.time(datetime.datetime.now()) 
         clue.put()
+        logging.debug("Clue Object Created")
         
         game.clue = clue.key()
         game.active = True
         game.put()
+        
+        logging.debug("Game object created")
 
         #Notify users in the location
         
         #Return Game ID to UI
+        logging.debug(game.key().id)
         self.response.out.write(json.dumps({'gameid': game.key().id}))
 
 '''
