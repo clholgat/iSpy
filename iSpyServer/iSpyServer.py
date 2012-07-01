@@ -120,16 +120,6 @@ class FetchGames(webapp2.RequestHandler):
                 result[g.key()] = g.location
         
         self.response.out.write(json.dumps(result))
-        '''
-        index = search.Index(Game.location)
-        query = "distance(Game.location, point_of_origin) < " + range
-        try:
-            results = index.search(query)
-            for g in results:
-                #process game ids
-        except search.Error:
-            self.response.out.write(search.Error.message)
-        '''
 
 '''
 User begins a game
