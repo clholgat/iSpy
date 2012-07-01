@@ -6,8 +6,6 @@ import datetime
 
 from google.appengine.ext import db
 from google.appengine.api import users
-from google.appengine.api import urlfetch
-from google.appengine.api import search
 
 import geo.geomodel
 import geo.geotypes
@@ -18,35 +16,55 @@ from models import Game
 
 
 '''
+Authenticates a user
+'''
+def auth():
+    logging.debug("auth: ")    
+    user = users.get_current_user()
+    if user:
+        logging.debug("auth: User logged in")
+        player = User.gql("WHERE player = :1", user)
+        return player.fetch(1)[0]
+    else:
+        logging.debug("auth: Cannot find a logged in user")
+        return None
+'''
 Registers a new user
 '''
 class Register(webapp2.RequestHandler):
     def post(self):
+        logging.debug("Register:")
         user = users.get_current_user()
-        
         if user:
+            logging.debug("Register: User Registered")
             player = User()
             player.account = user
             player.deviceId = int(self.request.get("deviceId"))
             player.put()
         else:
+            logging.debug("Register: User Not Registered")
             self.repsonse.out.write(json.dumps({'error': 'No authenticated user'}))
-
         self.response.out.write(json.dumps({'success': 'user registered'}))
-
 '''
 User creates a game - name (str), range (float), clue (string)
 '''
 class CreateGame(webapp2.RequestHandler):
     def post(self):
-        user = auth()
-        
+        logging.debug("CreateGame: ")
+        u = users.get_current_user()
+        if u:
+            logging.debug("CreateGame: User logged in")
+            player = User.gql("WHERE player = :1", u)
+            user = player.fetch(1)[0]
+        else:
+            logging.debug("CreateGame: Cannot find a logged in user")
+            user = None
+        #user = auth()    
         if user == None:
-            logging.debug("Entered unauthenticated user!!")
+            logging.debug("CreateGame: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
             return
-        
-        logging.debug("Before creating Game Object")
+        logging.debug("CreateGame: Before creating Game Object")
         #Create Game
         game = Game()
         game.name = self.request.get("name")
@@ -56,23 +74,20 @@ class CreateGame(webapp2.RequestHandler):
         game.location = db.GeoPt(self.request.get('lat'), self.request.get('lon'))  ## Do we get current location? or is it sent by post?
         game.range = self.request.get('range')
         game.startTime = datetime.datetime.now()
-
-        logging.debug("Before creating Clue Object")
+        logging.debug("CreateGame: Before creating Clue Object")
         
         clue = Message()
         clue.text = self.request.get('clue')
         clue.user = user
-
         clue.time = datetime.time(datetime.datetime.now()) 
         clue.put()
-        logging.debug("Clue Object Created")
+        logging.debug("CreateGame: Clue Object Created")
         
         game.clue = clue.key()
         game.active = True
         game.put()
         
         logging.debug("Game object created")
-
         #Notify users in the location
         
         #Return Game ID to UI
@@ -111,18 +126,16 @@ class FetchGames(webapp2.RequestHandler):
         except search.Error:
             self.response.out.write(search.Error.message)
         '''
-        
+
 '''
 User begins a game
 '''
 class StartGame(webapp2.RequestHandler):
     def post(self):
         user = auth()
-
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
-
         game = Game.gql("WHERE creator = :1", user)
         # handle notifications here
 
@@ -133,12 +146,11 @@ When someone guesses the right option
 class Message(webapp2.RequestHandler):
     def post(self, messageid):
         user = auth()
-
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         confirm = self.request.get("confirm");
-        # confirm/deny guess        
+        # confirm/deny guess
 
 '''
 Retrieves the list of messages
@@ -149,20 +161,17 @@ class Messages(webapp2.RequestHandler):
     '''
     def post(self, gameid):
         user = auth()
-
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         gameid = int(gameid)
         message = json.loads(self.request.get("message"))
         # Handle message
-
     '''
     Messages are fetched by user using game id
     '''
     def get(self, gameid):
         user = auth()
-
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
@@ -177,7 +186,6 @@ class Messages(webapp2.RequestHandler):
                               'text': m.text
                               }
         return json.dumps(reply)
-        # return messages
 
 '''
 When someone joins an ongoing game
@@ -186,14 +194,12 @@ Input: game id
 class Join(webapp2.RequestHandler):
     def post(self, gameid):
         user = auth()
-
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         
         # Check to see if the game is still active
         
-
         # add user to game
 
 '''
@@ -202,25 +208,10 @@ Periodically update the users' Current location
 class Location(webapp2.RequestHandler):
     def post(self):
         user = auth()
-
         if user == None:
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         # Store user location
-
-
-
-'''
-Authenticates a user
-'''
-def auth():
-    user = users.get_current_user()
-
-    if user:
-        player = User.gql("WHERE player = :1", user)
-        return player.fetch(1)[0]
-    else:
-        return None
 
 '''
 A Player sends a guess to the game initiator
@@ -242,7 +233,6 @@ def sendMessage(player, message):
     #request = urllib.Request(url, data_encode, headers)
   #  response = urllib.urlopen(request)
   #  logging.debug(response.read())
-
 
 app = webapp2.WSGIApplication([
     ('/register', Register),
