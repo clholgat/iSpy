@@ -142,24 +142,15 @@ class Message(webapp2.RequestHandler):
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         confirm = self.request.get("confirm");
-
         message = MyMessage.get_by_id(int(messageid))
         if confirm == "true":
             message.confirmed = True
         else:
             message.confirmed = False
-
         message.put()
-
         # confirm/deny guess
 
-'''
-Retrieves the list of messages
-'''
 class PostMessage(webapp2.RequestHandler):
-    '''
-    Message is posted to a game by a user
-    '''
     def post(self, gameid):
         user = auth()
         if user == None:
@@ -168,7 +159,6 @@ class PostMessage(webapp2.RequestHandler):
         gameid = int(gameid)
         text = self.request.get("text")
         bitmap = self.request.get("image")
-
         message = MyMessage()
         message.time = datetime.datetime.now()
         message.user = user
@@ -178,7 +168,6 @@ class PostMessage(webapp2.RequestHandler):
         message.confirmed = False
         message.put()
         self.response.out.write(json.dumps({'success': 'sent message'}))
-        # Handle message
 
 class GetMessages(webapp2.RequestHandler):
     '''
