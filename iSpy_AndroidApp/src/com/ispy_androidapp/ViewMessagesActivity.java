@@ -49,6 +49,8 @@ public class ViewMessagesActivity extends Activity {
 			public void onClick(View v) {
 				new SendMessageTask(text.getText().toString(), bitmap).execute();
 				new GetMessagesTask(messages, adapter).execute(Constant.gameId);
+				text.clearComposingText();
+				text.setText("");
 			}
 		});
 		

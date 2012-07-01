@@ -114,7 +114,7 @@ class FetchGames(webapp2.RequestHandler):
         for g in active_games:
             distance = geo.geomath.distance(point_of_origin, g.location)
             if distance < g.range:
-                result.append(g.location)
+                result.append({'lat': g.location.latitude, 'lon': g.locaiton.longitude, 'gameid': int(g.key().id())})
         self.response.out.write(json.dumps(result))
 
 '''
