@@ -18,10 +18,10 @@ import com.google.gson.Gson;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class CreateGameTask extends AsyncTask<Void, Void, String> {
+public class CreateGameTask extends AsyncTask<Game, Void, String> {
 	private String TAG = "CreateGameTask";
 	@Override
-	protected String doInBackground(Void... params) {
+	protected String doInBackground(Game... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(Constant.server+"/creategame");

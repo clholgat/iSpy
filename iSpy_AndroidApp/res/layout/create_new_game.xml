@@ -14,7 +14,7 @@
     	/>
  		
  		<EditText
-        	android:id="@+id/editText"
+        	android:id="@+id/gamename"
         	android:layout_height="wrap_content"
         	android:layout_width="match_parent">
 		</EditText>
