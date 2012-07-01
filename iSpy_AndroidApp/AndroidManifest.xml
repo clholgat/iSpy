@@ -42,6 +42,7 @@
         <activity android:name=".CreateViewGame"/>
         <activity android:name=".CreateGame"/>
         <activity android:name=".ViewGamesInArea"/>
+        <activity android:name=".ViewMessagesActivity"/>
         <service android:name="LocationService"></service>
     </application>
 </manifest>

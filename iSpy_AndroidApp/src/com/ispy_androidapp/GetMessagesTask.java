@@ -47,6 +47,7 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 	@Override
 	protected void onPostExecute(String json) {
 		Gson gson = new Gson();
+		Log.e(TAG, json);
 		Message[] newMessages = gson.fromJson(json, Message[].class);
 		for (Message m : newMessages) {
 			messages.add(m);

@@ -49,6 +49,7 @@ public class CreateGameTask extends AsyncTask<Game, Void, String> {
 	@Override
 	protected void onPostExecute(String json) {
 		Gson gson = new Gson();
+		
 		Response response = gson.fromJson(json, Response.class);
 		if (response.error != null) {
 			Log.e(TAG, response.error);
