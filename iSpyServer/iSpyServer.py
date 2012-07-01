@@ -166,7 +166,16 @@ class Messages(webapp2.RequestHandler):
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         gameid = int(gameid)
-        message = json.loads(self.request.get("message"))
+        text = self.request.get("text")
+        bitmap = self.request.get("image")
+
+        message = MyMessage()
+        message.time = datetime.datetime.now()
+        message.user = user
+        message.gameid = gameid
+        message.img = bitmap
+        message.confirmed = false
+        self.response.out.write(json.dumps({'success': 'sent message'}))
         # Handle message
     '''
     Messages are fetched by user using game id
@@ -181,11 +190,9 @@ class Messages(webapp2.RequestHandler):
         q = db.GQLQuery("SELECT * FROM Message WHERE gameid= :1 AND time > :2", gameid, since)
         
         results = q.fetch()
-        reply = {}
-        for m in results:
-            reply[m.key()] = {'img' : m.img,
-                              'text': m.text
-                              }
+        reply = []
+        for result in results:
+            reply.append(result.toDict())
         return json.dumps(reply)
 
 '''

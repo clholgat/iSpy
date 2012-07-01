@@ -25,6 +25,10 @@ class MyMessage(db.Model):
     time = db.DateTimeProperty()
     user = db.ReferenceProperty(MyUser)
     gameid = db.IntegerProperty()
-    img = db.LinkProperty()
+    img = db.StringProperty()
     text = db.StringProperty()
     confirmed = db.BooleanProperty()
+
+    def toDict(self):
+        return {'messageId': this.key().id, 'time': this.time, 'user': this.user.key().id, 'username': this.user, 
+            'img': this.img, 'text': this.text, 'confirmed': this.confirmed}
