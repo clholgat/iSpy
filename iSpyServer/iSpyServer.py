@@ -40,13 +40,13 @@ class Register(webapp2.RequestHandler):
         user = users.get_current_user()
         if user:
             logging.debug("Register: User Registered")
+            player = MyUser.gql("WHERE account = :1", user)
+        else:
+            logging.debug("Register: User Not Registered")
             player = MyUser()
             player.account = user
             player.deviceId = self.request.get("deviceId")
             player.put()
-        else:
-            logging.debug("Register: User Not Registered")
-            self.response.out.write(json.dumps({'error': 'No authenticated user'}))
         self.response.out.write(json.dumps({'success': 'user registered'}))
 '''
 User creates a game - name (str), range (float), clue (string)
@@ -93,7 +93,6 @@ class CreateGame(webapp2.RequestHandler):
 
 '''
 Fetch Games in nearby area
-Input: point of origin (lat/long) & range 
 '''
 class FetchGames(webapp2.RequestHandler):
     def get(self):
@@ -103,8 +102,7 @@ class FetchGames(webapp2.RequestHandler):
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
         return
         #Get requester's current location
-        point_of_origin = db.GeoPt(self.request.get("lat"), self.request.get("long"))
-        range = self.request.get("range")
+        point_of_origin = user.location
         query_keys = Game.all()
         query_keys.filter('active = ', True)
         active_games = db.get(query_keys)
@@ -208,6 +206,13 @@ class Join(webapp2.RequestHandler):
             return
         
         # Check to see if the game is still active
+        game = Game.get_by_id(int(gameid))
+        if not game.active:
+            self.response.out.write(json.dumps({'error': 'Game seems to have ended. Join some other game'}))
+        else:
+            game.players.append(user)
+            game.put()
+            user.activeGame = game
         
         # add user to game
 
@@ -221,6 +226,8 @@ class Location(webapp2.RequestHandler):
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         # Store user location
+        user.location = db.GeoPt(float(self.request.get('lat')), float(self.request.get('lon')))
+        user.put()
 
 '''
 A Player sends a guess to the game initiator
