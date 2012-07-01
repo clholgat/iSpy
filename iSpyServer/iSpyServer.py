@@ -245,12 +245,12 @@ def sendMessage(player, message):
   #  logging.debug(response.read())
 
 app = webapp2.WSGIApplication([
-    ('/register', Register),
+    webapp2.Route('/register', handler=Register),
     ('/creategame', CreateGame),
     ('/startgame', StartGame),
     ('/fetchgames', FetchGames),
     webapp2.Route('/confirm/<messageid:[0-9]*>', handler=Message),
-    webapp2.Route('/messsages/<gameid: [0-9]*>', handler=Messages),
+    webapp2.Route('/messages/<gameid: [0-9]*>', handler=Messages),
     webapp2.Route('/join/<gameid: [0-9]*>', handler=Join),
     ('/location', Location),
     ], debug=True)
