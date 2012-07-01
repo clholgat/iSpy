@@ -81,12 +81,9 @@ class CreateGame(webapp2.RequestHandler):
         clue.time = datetime.datetime.now() 
         clue.put()
         logging.debug("CreateGame: Clue Object Created")
-        
         game.clue = clue.key().id()
         game.active = True
         game.put()
-        
-        
         logging.debug("Game object created")
         clue.gameid = game.key().id()
         clue.user = user
@@ -96,17 +93,14 @@ class CreateGame(webapp2.RequestHandler):
         logging.debug(game.key().id())
         self.response.out.write(json.dumps({'gameid': game.key().id()}))
 
-'''
-Fetch Games in nearby area
-'''
 class FetchGames(webapp2.RequestHandler):
     def get(self):
         user = auth()
         if user == None:
-            logging.debug("CreateGame: Entered unauthenticated user!!")
+            logging.debug("FetchGames: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
-        return
-        #Get requester's current location
+            return
+        
         point_of_origin = user.location
         query_keys = Game.all()
         query_keys.filter('active = ', True)
@@ -118,7 +112,6 @@ class FetchGames(webapp2.RequestHandler):
             distance = geo.geomath.distance(point_of_origin, g.location)
             if distance < g.range:
                 result[g.key()] = g.location
-        
         self.response.out.write(json.dumps(result))
 
 '''
@@ -218,8 +211,10 @@ class Location(webapp2.RequestHandler):
     def post(self):
         user = auth()
         if user == None:
+            logging.debug("Location: User Authentication Error")
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
+        logging.debug("Location: User Authorized")
         # Store user location
         user.location = db.GeoPt(float(self.request.get('lat')), float(self.request.get('lon')))
         user.put()
