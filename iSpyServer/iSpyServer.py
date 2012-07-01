@@ -102,9 +102,8 @@ class FetchGames(webapp2.RequestHandler):
             return
         
         point_of_origin = user.location
-        query_keys = Game.all()
-        query_keys.filter('active = ', True)
-        active_games = db.get(query_keys)
+        game_keys = Game.gql('WHERE active =  :1',True)
+        active_games = game_keys.fetch()
         
         result = {}
         
