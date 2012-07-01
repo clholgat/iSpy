@@ -16,10 +16,10 @@ import org.apache.http.message.BasicNameValuePair;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class UpdateLocationTask extends AsyncTask<Long, Void, String> {
-
+public class UpdateLocationTask extends AsyncTask<Double, Void, String> {
+	private String TAG = "UpdateLocationTask";
 	@Override
-	protected String doInBackground(Long... params) {
+	protected String doInBackground(Double... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(Constant.server+"/location");

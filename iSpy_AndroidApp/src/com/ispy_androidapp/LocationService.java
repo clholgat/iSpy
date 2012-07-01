@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 
 public class LocationService extends Service {
@@ -35,7 +36,8 @@ public class LocationService extends Service {
 		
 
 		public void onLocationChanged(Location location) {
-			// TODO Auto-generated method stub
+			new UpdateLocationTask().execute(location.getLatitude(), location.getLongitude());
+			Log.d(TAG, "onLocationChanged");
 
 		}
 

@@ -14,6 +14,10 @@ public class GCMIntentService extends IntentService {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public GCMIntentService() {
+		super("GCMIntentService");
+	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
