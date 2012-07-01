@@ -1,6 +1,7 @@
 package com.ispy_androidapp;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.http.HttpResponse;
@@ -15,6 +16,14 @@ import com.google.gson.Gson;
 
 public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 	private String TAG = "GetMessagesTask";
+	private List<Message> messages;
+	private MessageAdapter adapter;
+	
+	public GetMessagesTask(List<Message> messages, MessageAdapter adapter) {
+		this.messages = messages;
+		this.adapter = adapter;
+	}
+	
 	@Override
 	protected String doInBackground(Long... params) {
 		try {
@@ -26,6 +35,7 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 			
 			InputStream in = response.getEntity().getContent();
 			String json = new Scanner(in).useDelimiter("\\A").next();
+			Constant.lastUpdate = System.currentTimeMillis();
 			return json;
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
@@ -37,8 +47,11 @@ public class GetMessagesTask extends AsyncTask<Long, Void, String> {
 	@Override
 	protected void onPostExecute(String json) {
 		Gson gson = new Gson();
-		Message[] messages = gson.fromJson(json, Message[].class);
-		// Will eventually do something with these.
+		Message[] newMessages = gson.fromJson(json, Message[].class);
+		for (Message m : newMessages) {
+			messages.add(m);
+		}
+		adapter.notifyDataSetChanged();
 	}
 
 }

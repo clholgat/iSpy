@@ -9,4 +9,7 @@
     <string name="game_name_label"> Enter Name of the Game: </string>
     <string name="range_label"> Enter Range:</string>
     <string name="clue_label"> Enter Clue: </string>
+    <string name="send">Send</string>
+    <string name="right">Right</string>
+    <string name="wrong">Wrong</string>
 </resources>

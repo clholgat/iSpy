@@ -15,6 +15,8 @@ import com.google.android.gcm.GCMRegistrar;
 public class MainActivity extends ListActivity {
 	private String TAG = "MainActivity";
 	
+	private Account[] accounts;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +25,7 @@ public class MainActivity extends ListActivity {
        
         
         AccountManager accountManager = AccountManager.get(this);
-        Account[] accounts = accountManager.getAccountsByType("com.google");
+        accounts = accountManager.getAccountsByType("com.google");
         
         int num_accounts = accounts.length;
         
@@ -48,12 +50,15 @@ public class MainActivity extends ListActivity {
           Log.v(TAG, "Already registered");
         }
         
+        Intent intent = new Intent(this, LocationService.class);
+        startService(intent);
     }
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-    	
-    	 Intent myIntent = new Intent(v.getContext(),CreateViewGame.class);
-         startActivityForResult(myIntent, 0);
+    	Account account = accounts[position];
+    	new AuthTask(this).execute(account);
+    	Intent myIntent = new Intent(v.getContext(), CreateViewGame.class);
+        startActivityForResult(myIntent, 0);
     }
     
 }

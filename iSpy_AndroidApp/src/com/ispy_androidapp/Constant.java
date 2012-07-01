@@ -6,4 +6,5 @@ public class Constant {
 	public static long lastUpdate = 0;
 	public static long gameId = 0;
 	public static String registrationId = null;
+	public static boolean creator = false;
 }
