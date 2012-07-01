@@ -85,6 +85,7 @@ class CreateGame(webapp2.RequestHandler):
         logging.debug("Game object created")
         clue.gameid = game.key().id()
         clue.user = user
+        clue.put()
         #Notify users in the location
         #Return Game ID to UI
         logging.debug(game.key().id())
@@ -96,6 +97,11 @@ Input: point of origin (lat/long) & range
 '''
 class FetchGames(webapp2.RequestHandler):
     def get(self):
+        user = auth()
+        if user == None:
+            logging.debug("CreateGame: Entered unauthenticated user!!")
+            self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
+        return
         #Get requester's current location
         point_of_origin = db.GeoPt(self.request.get("lat"), self.request.get("long"))
         range = self.request.get("range")
@@ -111,7 +117,6 @@ class FetchGames(webapp2.RequestHandler):
                 result[g.key()] = g.location
         
         self.response.out.write(json.dumps(result))
-                    
         '''
         index = search.Index(Game.location)
         query = "distance(Game.location, point_of_origin) < " + range
@@ -191,6 +196,7 @@ class Join(webapp2.RequestHandler):
     def post(self, gameid):
         user = auth()
         if user == None:
+            logging.debug("CreateGame: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'No autheticated user'}))
             return
         
