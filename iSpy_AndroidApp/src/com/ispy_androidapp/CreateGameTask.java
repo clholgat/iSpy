@@ -28,9 +28,9 @@ public class CreateGameTask extends AsyncTask<Game, Void, String> {
 			post.setHeader("Cookie", Constant.authCookie);
 			
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
-			list.add(new BasicNameValuePair("name", "name"));
-			list.add(new BasicNameValuePair("range", "range"));
-			list.add(new BasicNameValuePair("clue", "clue"));
+			list.add(new BasicNameValuePair("name",params[0].name ));
+			list.add(new BasicNameValuePair("range", params[0].range));
+			list.add(new BasicNameValuePair("clue", params[0].clue));
 			
 			post.setEntity(new UrlEncodedFormEntity(list));
 			
