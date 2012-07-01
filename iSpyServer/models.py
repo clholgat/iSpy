@@ -21,8 +21,8 @@ class MyUser(db.Model):
     location = db.GeoPtProperty()           # Users most recent location
     deviceId = db.StringProperty()
 
-class Message(db.Model):
-    time = db.TimeProperty()
+class MyMessage(db.Model):
+    time = db.DateTimeProperty()
     user = db.ReferenceProperty(MyUser)
     gameid = db.IntegerProperty()
     img = db.LinkProperty()

@@ -13,7 +13,7 @@ import geo.geomath
 
 from models import MyUser
 from models import Game
-from models import Message
+from models import MyMessage
 
 
 '''
@@ -66,15 +66,14 @@ class CreateGame(webapp2.RequestHandler):
         game.players = []
         game.messages = []
         game.creator = user.key().id()
-        game.location = db.GeoPt(self.request.get('lat'), self.request.get('lon'))  ## Do we get current location? or is it sent by post?
-        game.range = self.request.get('range')
+        game.location = user.location
+        game.range = float(self.request.get('range'))
         game.startTime = datetime.datetime.now()
         logging.debug("CreateGame: Before creating Clue Object")
         
-        clue = Message()
+        clue = MyMessage()
         clue.text = self.request.get('clue')
-        clue.user = user.key().id()
-        clue.time = datetime.time(datetime.datetime.now()) 
+        clue.time = datetime.datetime.now() 
         clue.put()
         logging.debug("CreateGame: Clue Object Created")
         
@@ -85,8 +84,7 @@ class CreateGame(webapp2.RequestHandler):
         
         logging.debug("Game object created")
         clue.gameid = game.key().id()
-        
-        logging.debug("CreateGame: Clue Object Updated" + clue.gameid)
+        clue.user = user
         #Notify users in the location
         #Return Game ID to UI
         logging.debug(game.key().id())
