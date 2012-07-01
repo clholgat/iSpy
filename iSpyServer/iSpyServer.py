@@ -51,15 +51,7 @@ User creates a game - name (str), range (float), clue (string)
 class CreateGame(webapp2.RequestHandler):
     def post(self):
         logging.debug("CreateGame: ")
-        u = users.get_current_user()
-        if u:
-            logging.debug("CreateGame: User logged in")
-            player = User.gql("WHERE player = :1", u)
-            user = player.fetch(1)[0]
-        else:
-            logging.debug("CreateGame: Cannot find a logged in user")
-            user = None
-        #user = auth()    
+        user = auth()
         if user == None:
             logging.debug("CreateGame: Entered unauthenticated user!!")
             self.response.out.write(json.dumps({'error': 'Unauthenticated User'}))
