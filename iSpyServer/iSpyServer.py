@@ -116,7 +116,7 @@ class FetchGames(webapp2.RequestHandler):
         for g in active_games:
             distance = geo.geomath.distance(point_of_origin, g.location)
             if distance < g.range:
-                result.append({'lat': g.location.latitude, 'lon': g.locaiton.longitude, 'gameid': int(g.key().id())})
+                result.append({'lat': g.location.lat, 'lon': g.location.lon, 'gameid': int(g.key().id())})
         self.response.out.write(json.dumps(result))
 
 '''
@@ -228,6 +228,8 @@ class Location(webapp2.RequestHandler):
         # Store user location
         user.location = db.GeoPt(float(self.request.get('lat')), float(self.request.get('lon')))
         user.put()
+        logging.debug(user.location.latitude)
+        logging.debug(user.location.longitude)
 
 '''
 A Player sends a guess to the game initiator
